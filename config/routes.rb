@@ -7,16 +7,16 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  
+
   namespace :api do
     namespace :v1 do
       # Auth routes
-      post 'signup', to: 'auth#signup'
-      post 'login', to: 'auth#login'
-      
+      post "signup", to: "auth#signup"
+      post "login", to: "auth#login"
+
       # Resources
       resources :bookings
-      resources :hotels, only: [:index, :show]
+      resources :hotels, only: [ :index, :show ]
     end
   end
 end
