@@ -11,6 +11,7 @@ A professional Rails 7 API-only application that exposes a realistic hotel booki
 - **Authorization**: Users can only access and modify their own bookings
 - **Comprehensive Testing**: RSpec tests with FactoryBot fixtures and Shoulda matchers
 - **RESTful Design**: API versioning (v1 namespace) following REST conventions
+- **Swagger/OpenAPI Documentation**: Interactive API documentation at `/api-docs`
 
 ## Tech Stack
 
@@ -19,6 +20,7 @@ A professional Rails 7 API-only application that exposes a realistic hotel booki
 - **Database**: PostgreSQL
 - **Authentication**: JWT (JSON Web Tokens) with bcrypt
 - **Testing**: RSpec, FactoryBot, Shoulda Matchers, Faker
+- **API Documentation**: Rswag (Swagger/OpenAPI 3.0)
 - **Docker**: Dockerized setup included
 
 ## Prerequisites
@@ -65,6 +67,44 @@ rails server
 
 The API will be available at `http://localhost:3000`
 
+## Interactive API Documentation (Swagger)
+
+This project includes **interactive Swagger/OpenAPI documentation** powered by Rswag.
+
+### Accessing Swagger UI
+
+Once the server is running, visit:
+
+```
+http://localhost:3000/api-docs
+```
+
+The Swagger UI provides:
+- **Interactive testing**: Try all API endpoints directly in your browser
+- **Request/Response examples**: See expected data formats
+- **Authentication**: Test protected endpoints with JWT tokens
+- **Complete API specification**: Browse all available endpoints with detailed descriptions
+
+### Using Swagger UI
+
+1. Start the Rails server: `rails server`
+2. Open browser to `http://localhost:3000/api-docs`
+3. Click on any endpoint to expand details
+4. Click **"Try it out"** to test endpoints
+5. For protected endpoints:
+   - First call `/api/v1/login` to get a JWT token
+   - Click the **"Authorize"** button at the top
+   - Enter: `Bearer YOUR_JWT_TOKEN`
+   - Now you can test protected endpoints
+
+### Regenerating Swagger Documentation
+
+If you modify the API specs, regenerate the documentation:
+
+```bash
+RAILS_ENV=test rake rswag:specs:swaggerize
+```
+
 ## API Documentation
 
 ### Base URL
@@ -86,6 +126,7 @@ Create a new user account and receive a JWT token.
   "password": "password123",
   "password_confirmation": "password123",
   "name": "John Doe"
+
 }
 ```
 
