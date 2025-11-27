@@ -1,0 +1,423 @@
+---
+openapi: 3.0.1
+info:
+  title: Rails Bookings API
+  version: v1
+  description: A RESTful API for managing bookings with JWT authentication. Supports
+    user registration, authentication, and booking CRUD operations.
+paths:
+  "/api/v1/signup":
+    post:
+      summary: Register a new user
+      tags:
+      - Authentication
+      description: Creates a new user account and returns a JWT token
+      parameters: []
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT authentication token
+                    example: eyJhbGciOiJIUzI1NiJ9...
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: user@example.com
+                      name:
+                        type: string
+                        example: John Doe
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - Email is invalid
+                    - Password is too short
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                  description: User email address
+                password:
+                  type: string
+                  example: password123
+                  description: User password (minimum 6 characters)
+                password_confirmation:
+                  type: string
+                  example: password123
+                  description: Password confirmation
+                name:
+                  type: string
+                  example: John Doe
+                  description: User full name
+              required:
+              - email
+              - password
+              - password_confirmation
+              - name
+  "/api/v1/login":
+    post:
+      summary: Login and get JWT token
+      tags:
+      - Authentication
+      description: Authenticates user credentials and returns a JWT token
+      parameters: []
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT authentication token
+                    example: eyJhbGciOiJIUzI1NiJ9...
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: user@example.com
+                      name:
+                        type: string
+                        example: John Doe
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid email or password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                  description: User email address
+                password:
+                  type: string
+                  example: password123
+                  description: User password
+              required:
+              - email
+              - password
+  "/api/v1/bookings":
+    get:
+      summary: List all bookings for authenticated user
+      tags:
+      - Bookings
+      security:
+      - bearerAuth: []
+      description: Returns all bookings belonging to the authenticated user
+      responses:
+        '200':
+          description: Bookings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    user_id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: Conference Room Booking
+                    description:
+                      type: string
+                      example: Team meeting
+                    start_time:
+                      type: string
+                      format: date-time
+                      example: '2024-01-15T10:00:00Z'
+                    end_time:
+                      type: string
+                      format: date-time
+                      example: '2024-01-15T11:00:00Z'
+                    status:
+                      type: string
+                      enum:
+                      - pending
+                      - confirmed
+                      - cancelled
+                      example: confirmed
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+        '401':
+          description: Unauthorized - Missing or invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+    post:
+      summary: Create a new booking
+      tags:
+      - Bookings
+      security:
+      - bearerAuth: []
+      description: Creates a new booking for the authenticated user
+      parameters: []
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Conference Room Booking
+                  description:
+                    type: string
+                    example: Team meeting
+                  start_time:
+                    type: string
+                    format: date-time
+                  end_time:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                    example: pending
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - Title can't be blank
+                    - Start time can't be blank
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Conference Room Booking
+                  description: Booking title
+                description:
+                  type: string
+                  example: Team meeting
+                  description: Booking description (optional)
+                start_time:
+                  type: string
+                  format: date-time
+                  example: '2024-01-15T10:00:00Z'
+                  description: Booking start time
+                end_time:
+                  type: string
+                  format: date-time
+                  example: '2024-01-15T11:00:00Z'
+                  description: Booking end time
+                status:
+                  type: string
+                  enum:
+                  - pending
+                  - confirmed
+                  - cancelled
+                  example: pending
+                  description: Booking status
+              required:
+              - title
+              - start_time
+              - end_time
+  "/api/v1/bookings/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Booking ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Get booking details
+      tags:
+      - Bookings
+      security:
+      - bearerAuth: []
+      description: Returns details of a specific booking (owner only)
+      responses:
+        '200':
+          description: Booking found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  start_time:
+                    type: string
+                    format: date-time
+                  end_time:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '404':
+          description: Booking not found
+        '401':
+          description: Unauthorized
+    patch:
+      summary: Update booking
+      tags:
+      - Bookings
+      security:
+      - bearerAuth: []
+      description: Updates a booking (owner only)
+      parameters: []
+      responses:
+        '200':
+          description: Booking updated successfully
+        '404':
+          description: Booking not found
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated Booking Title
+                description:
+                  type: string
+                  example: Updated description
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+                status:
+                  type: string
+                  enum:
+                  - pending
+                  - confirmed
+                  - cancelled
+    delete:
+      summary: Delete booking
+      tags:
+      - Bookings
+      security:
+      - bearerAuth: []
+      description: Deletes a booking (owner only)
+      responses:
+        '204':
+          description: Booking deleted successfully
+        '404':
+          description: Booking not found
+        '401':
+          description: Unauthorized
+servers:
+- url: http://localhost:3000
+  description: Development server
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: api.example.com
+  description: Production server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /api/v1/login endpoint
