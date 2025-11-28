@@ -1,12 +1,5 @@
+# Dependabot disabled for portfolio project
+# Portfolio projects should maintain stable, tested versions
+# Manual updates can be done when needed
 version: 2
-updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
+updates: []
