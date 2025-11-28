@@ -452,3 +452,7 @@ spec/
 ## License
 
 MIT License - Portfolio project demonstrating Rails API skills.
+
+---
+
+*This project is part of the NandoLabs portfolio, showcasing professional Rails API development with JWT authentication and comprehensive testing.*
