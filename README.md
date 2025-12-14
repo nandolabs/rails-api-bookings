@@ -1,6 +1,7 @@
 # Rails Bookings API
 
-A clean, production-ready REST API built with **Ruby on Rails**, designed for managing bookings, customers, and availability.  
+A clean, production-ready REST API built with **Ruby on Rails**, designed for managing bookings, customers, and availability.
+I often fix ActiveRecord bugs, validation issues, and API regressions in systems like this.
 Ideal for hotel systems, appointment scheduling, event reservations, or any application that needs reliable booking logic.
 
 ---
